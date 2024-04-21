@@ -9,8 +9,7 @@ msg_in(msg_queue)
 
 net_connection::~net_connection()
 {
-	std::cout << "connection dtor" << std::endl;
-
+	disconnect();
 }
 
 void net_connection::send_message(net_message& message)

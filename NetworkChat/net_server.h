@@ -12,10 +12,10 @@ public:
 	net_server(int port);
 	virtual ~net_server();
 
-	void start();
-	void stop();
+	void Start();
+	void Stop();
 
-	void start_accept_connection();
+	void StartAcceptConnection();
 
 private:
 

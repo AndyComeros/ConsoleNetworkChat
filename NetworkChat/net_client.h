@@ -17,11 +17,11 @@ public:
 
 	void start();
 
-	void connect(const std::string& ip, int port);
-	void disconnect();
+	void Connect(const std::string& ip, int port);
+	void Disconnect();
 
-	void start_read_header();
-	void start_read_message();//not in use yet
+	void StartReadHeader();
+	void StartReadMessage();//not in use yet
 
 private:
 
