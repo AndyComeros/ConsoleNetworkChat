@@ -1,22 +1,21 @@
 
 #include "net_server.h"
 #include "net_client.h"
+#include "ts_queue.h"
 
 int main() {
 
 	bool is_server = false;
-
+	
 	if (is_server) {
 		net_server server(1234);
-		server.start();
+		server.Start();
 	}
 	else {
 		net_client client;
-		client.connect("127.0.0.1", 1234);
-		client.start();
+		client.Connect("127.0.0.1", 1234);
+		client.Start();
 	}
-
-
 
 	return 0;
 }

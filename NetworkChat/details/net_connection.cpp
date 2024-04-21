@@ -9,15 +9,15 @@ msg_in(msg_queue)
 
 net_connection::~net_connection()
 {
-	disconnect();
+	Disconnect();
 }
 
-void net_connection::send_message(net_message& message)
+void net_connection::SendMessage(net_message& message)
 {
 	
 }
 
-void net_connection::connect(const std::string& ip, int port)
+void net_connection::Connect(const std::string& ip, int port)
 {
 	asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string(ip), port);
 	m_socket.async_connect(endpoint, [&](const asio::error_code& ec) {
@@ -32,18 +32,18 @@ void net_connection::connect(const std::string& ip, int port)
 	});
 }
 
-void net_connection::disconnect()
+void net_connection::Disconnect()
 {
-	if (is_connected())
+	if (IsConnected())
 		asio::post(m_asio_context, [this]() { m_socket.close(); });
 }
 
-bool net_connection::is_connected()
+bool net_connection::IsConnected()
 {
 	return m_socket.is_open();
 }
 
-asio::ip::tcp::socket& net_connection::socket()
+asio::ip::tcp::socket& net_connection::Socket()
 {
 	return m_socket;
 }

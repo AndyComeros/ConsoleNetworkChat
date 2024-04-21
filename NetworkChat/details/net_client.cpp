@@ -8,14 +8,14 @@ net_client::~net_client()
 {
 }
 
-void net_client::start()
+void net_client::Start()
 {
 	readbuff = std::vector<char>(256);
-	start_read_header();
+	StartReadHeader();
 	m_asio_context.run();
 }
 
-void net_client::connect(const std::string& ip, int port)
+void net_client::Connect(const std::string& ip, int port)
 {
 	asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string(ip), port);
 	m_socket.async_connect(endpoint, [&](const asio::error_code& ec) {
@@ -30,11 +30,11 @@ void net_client::connect(const std::string& ip, int port)
 		});
 }
 
-void net_client::disconnect()
+void net_client::Disconnect()
 {
 }
 
-void net_client::start_read_header()
+void net_client::StartReadHeader()
 {
 	m_socket.async_read_some(asio::buffer(readbuff,sizeof(readbuff)), [&](const asio::error_code& ec, size_t bytes) 
 	{
@@ -46,10 +46,10 @@ void net_client::start_read_header()
 			///std::cerr << "[Error code start_read_header]: " << ec.message() << std::endl;
 		}
 		//std::cout << "\n";
-		start_read_header();
+		StartReadHeader();
 	});
 }
 
-void net_client::start_read_message()
+void net_client::StartReadMessage()
 {
 }

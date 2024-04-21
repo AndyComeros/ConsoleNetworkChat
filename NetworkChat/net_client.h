@@ -15,7 +15,7 @@ public:
 	net_client();
 	virtual ~net_client();
 
-	void start();
+	void Start();
 
 	void Connect(const std::string& ip, int port);
 	void Disconnect();
