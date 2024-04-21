@@ -3,6 +3,8 @@
 #include <asio/asio.hpp>
 #include "net_message.h"
 #include <deque>
+#include <iostream>
+
 
 class net_connection : public std::enable_shared_from_this<net_connection> {
 

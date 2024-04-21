@@ -1,21 +1,31 @@
 #pragma once
 
-#include <iostream>
-#include <cstring>
-#include <cstddef>
+#include <vector>
 
 struct net_message_header {
-	
+
+	int type = 0;
+	size_t data_size = 0;
 };
 
-class net_message {
 
-	static const int MAX_DATA = 512;
-
-public:
+struct net_message {
 	
+	net_message_header header;
+	std::vector<char> contents;
 
-private:
-	size_t m_size;
-	char m_data[MAX_DATA];
+	template<typename T>
+	void AddData(T nData);
 };
+
+
+template<typename T>
+inline void net_message::AddData(T nData)
+{
+	size_t s = contents.size();
+
+	contents.resize(contents.size() + sizeof(nData));
+	std::memcpy(contents.data() + s, &nData, sizeof(T));
+
+	header.data_size = contents.size();
+}

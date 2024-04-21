@@ -25,6 +25,8 @@ private:
 	std::shared_ptr<net_connection> m_newConnection;
 
 	asio::io_context m_asio_context;
-	std::deque<net_message> m_message_in;
 	asio::ip::tcp::acceptor m_acceptor;
+
+	std::deque<net_message> m_message_in;
+
 };
