@@ -40,9 +40,11 @@ void net_client::StartReadHeader()
 	{
 		if (!ec) {
 			std::cout.write(readbuff.data(), bytes);
+			std::cout << std::endl;
 			// << "[Recived]: " << bytes << " bytes:\n" << readbuff.data() << std::endl;
 		}else{
 			std::cout << ec.message();
+			std::cout << std::endl;
 			///std::cerr << "[Error code start_read_header]: " << ec.message() << std::endl;
 		}
 		//std::cout << "\n";

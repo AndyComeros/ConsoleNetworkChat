@@ -1,6 +1,6 @@
 #include "../net_connection.h"
 
-net_connection::net_connection(asio::io_context& context, std::deque<net_message>& msg_queue) : m_asio_context(context),
+net_connection::net_connection(asio::io_context& context, TSQue<net_message>& msg_queue) : m_asio_context(context),
 m_socket(context),
 msg_in(msg_queue)
 {
