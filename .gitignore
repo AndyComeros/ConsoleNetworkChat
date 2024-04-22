@@ -38,5 +38,6 @@ dependencies
 .vs
 x64
 x32
+Debug
 
 
