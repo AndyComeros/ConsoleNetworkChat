@@ -5,6 +5,7 @@
 #include <deque>
 #include <iostream>
 #include "ts_queue.h"
+#undef SendMessage // somehow scope is being polluted by windows header files
 
 class net_connection : public std::enable_shared_from_this<net_connection> {
 
@@ -21,10 +22,16 @@ public:
 	bool IsConnected();
 
 	asio::ip::tcp::socket& Socket();
+
 private:
 
-	TSQue<net_message>& msg_in;
-	TSQue<net_message> msg_out;
+	void WriteHeader();
+	void WriteBody();
+
+private:
+
+	TSQue<net_message>& m_msg_in;
+	TSQue<net_message> m_msg_out;
 	asio::io_context& m_asio_context;
 	asio::ip::tcp::socket m_socket;
 };

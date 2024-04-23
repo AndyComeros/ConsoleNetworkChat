@@ -36,22 +36,39 @@ void net_client::Disconnect()
 
 void net_client::StartReadHeader()
 {
-	m_socket.async_read_some(asio::buffer(readbuff,sizeof(readbuff)), [&](const asio::error_code& ec, size_t bytes) 
+	m_socket.async_read_some(asio::buffer(&m_current_message.header,sizeof(net_message_header)), [&](const asio::error_code& ec, size_t bytes) 
 	{
 		if (!ec) {
-			std::cout.write(readbuff.data(), bytes);
-			std::cout << std::endl;
-			// << "[Recived]: " << bytes << " bytes:\n" << readbuff.data() << std::endl;
+			std::cout << "recieved header: [" << bytes << "] bytes, expected: " << sizeof(net_message_header) << "\n";
+			std::cout << "header info [Type]: " << m_current_message.header.type << " | [size: ]" << m_current_message.header.data_size << std::endl;
+			// allocate memory in m_current_message to make sure it can store entire message
+			m_current_message.contents.resize(m_current_message.header.data_size);
+
+			// probably should check if message has a payload at all?
+			StartReadMessage();
+			
 		}else{
 			std::cout << ec.message();
 			std::cout << std::endl;
 			///std::cerr << "[Error code start_read_header]: " << ec.message() << std::endl;
 		}
-		//std::cout << "\n";
-		StartReadHeader();
 	});
 }
 
 void net_client::StartReadMessage()
 {
+	m_socket.async_read_some(asio::buffer(m_current_message.contents.data(), m_current_message.header.data_size), [&](const asio::error_code& ec, size_t bytes)
+		{
+			if (!ec) {
+
+				std::cout.write(m_current_message.contents.data(), bytes);
+				std::cout << std::endl;
+				StartReadHeader();
+			}
+			else {
+				std::cout << ec.message();
+				std::cout << std::endl;
+			}
+	});
+
 }

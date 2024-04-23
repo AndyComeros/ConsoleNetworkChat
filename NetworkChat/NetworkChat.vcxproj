@@ -145,7 +145,6 @@
   <ItemGroup>
     <ClCompile Include="details\net_client.cpp" />
     <ClCompile Include="details\net_connection.cpp" />
-    <ClCompile Include="details\net_message.cpp" />
     <ClCompile Include="details\net_server.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

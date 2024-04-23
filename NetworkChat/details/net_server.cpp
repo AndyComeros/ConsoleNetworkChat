@@ -24,7 +24,12 @@ void net_server::Start()
 		for (auto& it : m_connections)
 		{
 			std::cout << "\n[Sending Data]: " << strbuff << std::endl;
-			it->Socket().write_some(asio::buffer(strbuff));
+			//it->Socket().write_some(asio::buffer(strbuff));
+
+			net_message message;
+			message.AddData(strbuff.c_str(), strbuff.size());
+
+			it->SendMessage(message);
 		}
 	}
 }

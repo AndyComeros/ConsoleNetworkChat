@@ -27,9 +27,6 @@
     <ClCompile Include="details\net_connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="details\net_message.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net_message.h">

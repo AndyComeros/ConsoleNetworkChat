@@ -20,10 +20,14 @@ public:
 	void Connect(const std::string& ip, int port);
 	void Disconnect();
 
+	// should these be in the connection class?
 	void StartReadHeader();
 	void StartReadMessage();//not in use yet
 
 private:
+	
+	// should probs be in the connection class along with StartReadHeader and StartReadMessage?
+	net_message m_current_message;// message currently being read in;
 
 	//std::thread context_thread;
 	asio::io_context m_asio_context;

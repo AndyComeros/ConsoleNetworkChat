@@ -15,8 +15,8 @@ public:
 	void PushFront(const T& val);
 	void PushBack(const T& val);
 
-	const T Front();
-	const T Back();
+	const T& Front();
+	const T& Back();
 
 	T PopFront();
 	T PopBack();
@@ -47,14 +47,14 @@ inline void TSQue<T>::PushBack(const T& val)
 }
 
 template<typename T>
-inline const T TSQue<T>::Front()
+inline const T& TSQue<T>::Front()
 {
 	std::scoped_lock(m_mutex);
 	return m_queue.front();
 }
 
 template<typename T>
-inline const T TSQue<T>::Back()
+inline const T& TSQue<T>::Back()
 {
 	std::scoped_lock(m_mutex);
 	return m_queue.back();
