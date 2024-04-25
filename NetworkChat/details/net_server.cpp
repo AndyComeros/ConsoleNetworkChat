@@ -6,15 +6,15 @@ net_server::net_server(int port) : m_acceptor(m_asio_context, asio::ip::tcp::end
 
 net_server::~net_server()
 {
-	if (m_asio_thead)
-		if (m_asio_thead->joinable()) m_asio_thead->join();
+	if (m_asio_thread)
+		if (m_asio_thread->joinable()) m_asio_thread->join();
 }
 
 void net_server::Start()
 {
 	std::cout << "started server..." << std::endl;
 	StartAcceptConnection();
-	m_asio_thead = std::make_unique<std::thread>([&]() { m_asio_context.run(); });
+	m_asio_thread = std::make_unique<std::thread>([&]() { m_asio_context.run(); });
 
 	std::string strbuff;
 	for (;;) {

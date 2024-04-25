@@ -36,7 +36,7 @@ void net_connection::Connect(const std::string& ip, int port)
 			std::cout << "connected!" << std::endl;
 		}
 		else {
-			std::cerr << "[net_connection]: " << ec.message() << std::endl;
+			std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
 		}
 	});
 }
@@ -106,6 +106,8 @@ void net_connection::StartReadHeader()
 	m_socket.async_read_some(asio::buffer(&m_current_msg_in.header, sizeof(net_message_header)), [&](const asio::error_code& ec, size_t bytes)
 		{
 			if (!ec) {
+
+				std::cout << "recived message!\n";
 				// allocate memory in m_current_message to make sure it can store entire message
 				m_current_msg_in.contents.resize(m_current_msg_in.header.data_size);
 
@@ -114,8 +116,8 @@ void net_connection::StartReadHeader()
 
 			}
 			else {
-				std::cout << ec.message();
-				std::cout << std::endl;
+				std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
+
 			}
 		});
 }
@@ -125,12 +127,13 @@ void net_connection::StartReadMessage()
 	m_socket.async_read_some(asio::buffer(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
 		{
 			if (!ec) {
+				std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
 				StartReadHeader();
 			}
 			else {
 				std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
 			}
-		});
+	});
 }
 
 
