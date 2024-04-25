@@ -19,17 +19,23 @@ public:
 
 	void Disconnect();
 
+	void Start();
+
 	bool IsConnected();
 
 	asio::ip::tcp::socket& Socket();
 
 private:
 
-	void WriteHeader();
-	void WriteBody();
+	void StartWriteHeader();
+	void StartWriteBody();
+
+	void StartReadHeader();
+	void StartReadMessage();
 
 private:
 
+	net_message m_current_msg_in;
 	TSQue<net_message>& m_msg_in;
 	TSQue<net_message> m_msg_out;
 	asio::io_context& m_asio_context;

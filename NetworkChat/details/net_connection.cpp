@@ -22,7 +22,7 @@ void net_connection::SendMessage(net_message& message)
 		m_msg_out.PushBack(message);
 		
 		if (qEmpty)
-			WriteHeader();
+			StartWriteHeader();
 	});
 }
 
@@ -47,6 +47,11 @@ void net_connection::Disconnect()
 		asio::post(m_asio_context, [this]() { m_socket.close(); });
 }
 
+void net_connection::Start()
+{
+	StartReadHeader();
+}
+
 bool net_connection::IsConnected()
 {
 	return m_socket.is_open();
@@ -57,22 +62,22 @@ asio::ip::tcp::socket& net_connection::Socket()
 	return m_socket;
 }
 
-void net_connection::WriteHeader()
+void net_connection::StartWriteHeader()
 {
 	asio::async_write(m_socket, asio::buffer(&m_msg_out.Front().header, sizeof(net_message_header)),
 		[&](const asio::error_code& ec, size_t bytes) {
 
 			if (!ec) {
-				WriteBody();
+				StartWriteBody();
 			}
 			else {
 				//m_msg_out.PopFront();
-				std::cerr << "[Connection::WriteBody]: " << ec.message() << std::endl;
+				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
 			}
 		});
 }
 
-void net_connection::WriteBody()
+void net_connection::StartWriteBody()
 {
 	asio::async_write(m_socket, asio::buffer(m_msg_out.Front().contents.data(), m_msg_out.Front().contents.size()),
 		[&](const asio::error_code& ec, size_t bytes) {
@@ -82,11 +87,43 @@ void net_connection::WriteBody()
 
 				if (!m_msg_out.Empty()) {
 
-					WriteHeader();
+					StartWriteHeader();
 				}
 			}
 			else {
-				std::cerr << "[Connection::WriteBody]: " << ec.message() << std::endl;
+				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+			}
+		});
+}
+
+void net_connection::StartReadHeader()
+{
+	m_socket.async_read_some(asio::buffer(&m_current_msg_in.header, sizeof(net_message_header)), [&](const asio::error_code& ec, size_t bytes)
+		{
+			if (!ec) {
+				// allocate memory in m_current_message to make sure it can store entire message
+				m_current_msg_in.contents.resize(m_current_msg_in.header.data_size);
+
+				// probably should check if message has a payload at all?
+				StartReadMessage();
+
+			}
+			else {
+				std::cout << ec.message();
+				std::cout << std::endl;
+			}
+		});
+}
+
+void net_connection::StartReadMessage()
+{
+	m_socket.async_read_some(asio::buffer(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
+		{
+			if (!ec) {
+				StartReadHeader();
+			}
+			else {
+				std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
 			}
 		});
 }

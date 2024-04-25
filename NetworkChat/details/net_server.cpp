@@ -45,10 +45,11 @@ void net_server::StartAcceptConnection()
 		if (!ec)
 		{
 			m_connections.push_back(m_newConnection);
+			m_newConnection->Start();
 			std::cout << "Client connected!" << std::endl;
 		}
 		else {
-			std::cout << "[start_accept_connection]: " << ec.message() << std::endl;
+			std::cout << "[StartAcceptConnection]: " << ec.message() << std::endl;
 		}
 		
 		StartAcceptConnection();
