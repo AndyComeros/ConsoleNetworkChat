@@ -23,6 +23,8 @@ public:
 
 	bool IsConnected();
 
+	TSQue<net_message>& Recieved();
+
 	asio::ip::tcp::socket& Socket();
 
 private:

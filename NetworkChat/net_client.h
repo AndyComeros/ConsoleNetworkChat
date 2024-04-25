@@ -20,18 +20,16 @@ public:
 	void Connect(const std::string& ip, int port);
 	void Disconnect();
 
-	// should these be in the connection class?
 	void StartReadHeader();
-	void StartReadMessage();//not in use yet
+	void StartReadMessage();
 
 private:
 	
 	// should probs be in the connection class along with StartReadHeader and StartReadMessage?
 	net_message m_current_message;// message currently being read in;
 
-	//std::thread context_thread;
+	std::unique_ptr<std::thread> m_asio_thread;
 	asio::io_context m_asio_context;
 	asio::ip::tcp::socket m_socket;
 	std::deque<net_message> m_messages;
-	std::vector<char> readbuff;//demo purposes, switch for proper queue later
 };

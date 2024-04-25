@@ -19,14 +19,12 @@ public:
 
 private:
 
-	std::unique_ptr<std::thread> m_asio_thead;
-
-	std::vector<std::shared_ptr<net_connection>> m_connections;
-	std::shared_ptr<net_connection> m_newConnection;
-
+	std::unique_ptr<std::thread> m_asio_thread;
 	asio::io_context m_asio_context;
 	asio::ip::tcp::acceptor m_acceptor;
 
-	TSQue<net_message> m_message_in;
+	std::vector<std::shared_ptr<net_connection>> m_connections;
+	std::shared_ptr<net_connection> m_newConnection;
+	TSQue<net_message> m_messages;// recieved message queue to be read in.
 
 };

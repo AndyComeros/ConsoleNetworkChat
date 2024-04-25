@@ -57,6 +57,11 @@ bool net_connection::IsConnected()
 	return m_socket.is_open();
 }
 
+TSQue<net_message>& net_connection::Recieved()
+{
+	return m_msg_in;
+}
+
 asio::ip::tcp::socket& net_connection::Socket()
 {
 	return m_socket;

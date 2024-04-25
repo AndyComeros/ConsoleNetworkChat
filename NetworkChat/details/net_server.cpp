@@ -40,7 +40,7 @@ void net_server::Stop()
 
 void net_server::StartAcceptConnection()
 {
-	m_newConnection = std::make_shared<net_connection>(m_asio_context, m_message_in);
+	m_newConnection = std::make_shared<net_connection>(m_asio_context, m_messages);
 	m_acceptor.async_accept(m_newConnection->Socket(), [&](const asio::error_code& ec) {
 		if (!ec)
 		{
