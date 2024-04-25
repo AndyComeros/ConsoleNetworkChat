@@ -39,8 +39,6 @@ void net_client::StartReadHeader()
 	m_socket.async_read_some(asio::buffer(&m_current_message.header,sizeof(net_message_header)), [&](const asio::error_code& ec, size_t bytes) 
 	{
 		if (!ec) {
-			std::cout << "recieved header: [" << bytes << "] bytes, expected: " << sizeof(net_message_header) << "\n";
-			std::cout << "header info [Type]: " << m_current_message.header.type << " | [size: ]" << m_current_message.header.data_size << std::endl;
 			// allocate memory in m_current_message to make sure it can store entire message
 			m_current_message.contents.resize(m_current_message.header.data_size);
 

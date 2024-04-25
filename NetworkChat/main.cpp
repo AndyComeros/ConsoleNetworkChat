@@ -5,18 +5,6 @@
 
 int main() {
 
-
-	//net_message message;
-	//
-	//char words[] = { "hello" };
-	//
-	//message.AddData(words, sizeof(words));
-	//
-	//std::cout << message.header.type << std::endl;
-	//std::cout << message.header.data_size << std::endl;
-	//std::cout << message.TotalSize() << std::endl;
-	//std::cout << std::string(message.contents.begin(), message.contents.end()) << std::endl;
-
 	bool is_server = true;
 	
 	if (is_server) {

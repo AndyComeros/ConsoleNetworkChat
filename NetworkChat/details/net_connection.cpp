@@ -4,7 +4,6 @@ net_connection::net_connection(asio::io_context& context, TSQue<net_message>& ms
 m_socket(context),
 m_msg_in(msg_queue)
 {
-	std::cout << "connection ctor" << std::endl;
 }
 
 net_connection::~net_connection()
