@@ -21,10 +21,6 @@ public:
 	void Disconnect();
 
 private:
-	
-	// should probs be in the connection class along with StartReadHeader and StartReadMessage?
-	net_message m_current_message;// message currently being read in;
-
 
 	asio::io_context m_asio_context;
 	net_connection m_connection;
