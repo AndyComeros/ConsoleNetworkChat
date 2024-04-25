@@ -1,8 +1,9 @@
 #include "../net_connection.h"
 
-net_connection::net_connection(asio::io_context& context, TSQue<net_message>& msg_queue) : m_asio_context(context),
+net_connection::net_connection(asio::io_context& context, TSQue<net_message>& msg_queue, connectionID id = 0) : m_asio_context(context),
 m_socket(context),
-m_msg_in(msg_queue)
+m_msg_in(msg_queue),
+m_ID(id)
 {
 }
 
@@ -11,7 +12,7 @@ net_connection::~net_connection()
 	Disconnect();
 }
 
-void net_connection::SendMessage(net_message& message)
+void net_connection::SendMessage(const net_message& message)
 {
 	// there is probably something wrong here...
 	asio::post([&, message]() {

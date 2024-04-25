@@ -29,7 +29,7 @@ void net_server::Start()
 			net_message message;
 			message.AddData(strbuff.c_str(), strbuff.size());
 
-			it->SendMessage(message);
+			it.second->SendMessage(message);
 		}
 	}
 }
@@ -40,11 +40,13 @@ void net_server::Stop()
 
 void net_server::StartAcceptConnection()
 {
-	m_newConnection = std::make_shared<net_connection>(m_asio_context, m_messages);
+	m_newConnection = std::make_shared<net_connection>(m_asio_context, m_messages, m_nextID);
 	m_acceptor.async_accept(m_newConnection->Socket(), [&](const asio::error_code& ec) {
 		if (!ec)
 		{
-			m_connections.push_back(m_newConnection);
+			m_connections.emplace(m_nextID,m_newConnection);
+			++ m_nextID;
+
 			m_newConnection->Start();
 			std::cout << "Client connected!" << std::endl;
 		}
@@ -54,4 +56,17 @@ void net_server::StartAcceptConnection()
 		
 		StartAcceptConnection();
 	});
+}
+
+void net_server::SendMessage(const net_message& msg, connectionID id)
+{
+	if (m_connections.find(id) != m_connections.end())
+		m_connections[id]->SendMessage(msg);
+}
+
+void net_server::BroadcastMessage(const net_message& msg)
+{
+	for (auto it : m_connections) {
+		it.second->SendMessage(msg);
+	}
 }

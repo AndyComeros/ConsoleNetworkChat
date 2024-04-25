@@ -1,6 +1,6 @@
 #include "../net_client.h"
 
-net_client::net_client() : m_connection(m_asio_context, m_messages)
+net_client::net_client() : m_connection(m_asio_context, m_messages,0)
 {
 }
 
