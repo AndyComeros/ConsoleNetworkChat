@@ -24,3 +24,8 @@ void net_client::Connect(const std::string& ip, int port)
 void net_client::Disconnect()
 {
 }
+
+TSQue<net_message>& net_client::Messages()
+{
+	return m_messages;
+}

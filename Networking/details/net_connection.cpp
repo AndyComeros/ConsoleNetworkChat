@@ -34,10 +34,10 @@ void net_connection::Connect(const std::string& ip, int port)
 		
 		if (!ec)
 		{
-			std::cout << "connected!" << std::endl;
+			//std::cout << "connected!" << std::endl;
 		}
 		else {
-			std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
+			//std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
 		}
 	});
 }
@@ -78,7 +78,7 @@ void net_connection::StartWriteHeader()
 			}
 			else {
 				//m_msg_out.PopFront();
-				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
 			}
 		});
 }
@@ -97,7 +97,7 @@ void net_connection::StartWriteBody()
 				}
 			}
 			else {
-				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
 			}
 		});
 }
@@ -108,7 +108,7 @@ void net_connection::StartReadHeader()
 		{
 			if (!ec) {
 
-				std::cout << "recived message!\n";
+				//std::cout << "recived message!\n";
 				// allocate memory in m_current_message to make sure it can store entire message
 				m_current_msg_in.contents.resize(m_current_msg_in.header.data_size);
 
@@ -117,7 +117,7 @@ void net_connection::StartReadHeader()
 
 			}
 			else {
-				std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
+				//std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
 
 			}
 		});
@@ -128,11 +128,12 @@ void net_connection::StartReadMessage()
 	m_socket.async_read_some(asio::buffer(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
 		{
 			if (!ec) {
-				std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
+				//std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
+				m_msg_in.PushBack(m_current_msg_in);
 				StartReadHeader();
 			}
 			else {
-				std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
 			}
 	});
 }

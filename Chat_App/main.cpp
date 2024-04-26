@@ -2,17 +2,26 @@
 
 int main() {
 
-	bool is_server = false;
+	net_client client;
+	client.Connect("127.0.0.1", 1234);
+	client.Start();
 
-	if (is_server) {
-		net_server server(1234);
-		server.Start();
+		
+	TSQue<net_message>& messages = client.Messages();
+	for (;;) {
+		if (!messages.Empty()) {
+
+			const net_message& msg = messages.Front();
+			if (messages.Front().header.type == 1) {
+			
+				std::string senderName(msg.contents.data());
+				std::cout << "[" << senderName << "]" <<
+					std::string(msg.contents.begin() + senderName.length(), msg.contents.end()) << std::endl;
+			}
+			messages.PopFront();
+		}
 	}
-	else {
-		net_client client;
-		client.Connect("127.0.0.1", 1234);
-		client.Start();
-	}
+
 
 	return 0;
 }

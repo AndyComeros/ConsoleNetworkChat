@@ -6,9 +6,6 @@
 #include "net_message.h"
 #include "net_connection.h"
 
-
-// at the moment will try to read sent messages and then print them to the screen.
-// need to implement on message function
 class net_client { 
 public:
 
@@ -19,6 +16,8 @@ public:
 
 	void Connect(const std::string& ip, int port);
 	void Disconnect();
+
+	TSQue<net_message>& Messages();
 
 private:
 

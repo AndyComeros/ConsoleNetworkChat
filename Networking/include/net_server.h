@@ -8,6 +8,8 @@
 #include "ts_queue.h"
 #include "unordered_map"
 
+using connection_map = std::unordered_map<connectionID, std::shared_ptr<net_connection>>;
+
 class net_server {
 public:
 	net_server(int port);
@@ -22,13 +24,14 @@ public:
 
 	void BroadcastMessage(const net_message& msg);
 
+	connection_map& Connections();
 private:
 
 	std::unique_ptr<std::thread> m_asio_thread;
 	asio::io_context m_asio_context;
 	asio::ip::tcp::acceptor m_acceptor;
 
-	std::unordered_map<connectionID,std::shared_ptr<net_connection>> m_connections;
+	connection_map m_connections;
 	std::shared_ptr<net_connection> m_newConnection;
 	TSQue<net_message> m_messages;// recieved message queue to be read in.
 
