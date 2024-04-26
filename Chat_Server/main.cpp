@@ -1,12 +1,9 @@
-
-#include "net_server.h"
-#include "net_client.h"
-#include "ts_queue.h"
+#include "net.h"
 
 int main() {
 
 	bool is_server = true;
-	
+
 	if (is_server) {
 		net_server server(1234);
 		server.Start();
