@@ -29,3 +29,8 @@ TSQue<net_message>& net_client::Messages()
 {
 	return m_messages;
 }
+
+net_connection& net_client::Connection()
+{
+	return m_connection;
+}

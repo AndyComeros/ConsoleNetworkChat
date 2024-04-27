@@ -54,6 +54,11 @@ void net_server::BroadcastMessage(const net_message& msg)
 	}
 }
 
+TSQue<net_message>& net_server::Messages()
+{
+	return m_messages;
+}
+
 connection_map& net_server::Connections() {
 	return m_connections;
 }

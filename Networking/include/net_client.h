@@ -19,6 +19,8 @@ public:
 
 	TSQue<net_message>& Messages();
 
+	net_connection& Connection();
+
 private:
 
 	asio::io_context m_asio_context;

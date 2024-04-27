@@ -2,24 +2,27 @@
 
 int main() {
 
-	net_server server(1234);
+	net_server server(62225);
 	server.Start();
-	std::string strbuff;
-	for (;;) {
+	
+	std::thread printThread([&]() {
 
-		std::cin >> strbuff;
+		TSQue<net_message>& messages = server.Messages();
+		for (;;) {
 
-		for (auto& it : server.Connections())
-		{
-			std::cout << "\n[Sending Data]: " << strbuff << std::endl;
+			if (!messages.Empty()) {
 
-			net_message message;
-			message.header.type = 1;
-			message.AddData("poggers",sizeof("poggers"));
-			message.AddData(strbuff.c_str(), strbuff.size());
-
-			it.second->SendMessage(message);
+				const net_message& msg = messages.Front();
+				if (msg.header.type == 1) {
+					server.BroadcastMessage(msg);
+				}
+				messages.PopFront();
+			}
 		}
-	}
+	});
+
+	if (printThread.joinable())
+		printThread.join();
+
 	return 0;
 }

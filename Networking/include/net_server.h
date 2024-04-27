@@ -24,6 +24,8 @@ public:
 
 	void BroadcastMessage(const net_message& msg);
 
+	TSQue<net_message>& Messages();
+
 	connection_map& Connections();
 private:
 

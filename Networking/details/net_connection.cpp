@@ -34,10 +34,10 @@ void net_connection::Connect(const std::string& ip, int port)
 		
 		if (!ec)
 		{
-			//std::cout << "connected!" << std::endl;
+			std::cout << "connected!" << std::endl;
 		}
 		else {
-			//std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
+			std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
 		}
 	});
 }
