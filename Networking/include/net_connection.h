@@ -1,10 +1,9 @@
 #pragma once
 
-#include <asio/asio.hpp>
-#include "net_message.h"
-#include <deque>
 #include <iostream>
+#include <asio/asio.hpp>
 #include "ts_queue.h"
+#include "net_message.h"
 
 #undef SendMessage // somehow scope is being polluted by windows header files
 
