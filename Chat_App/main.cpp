@@ -40,9 +40,9 @@ int main() {
 				const net_message& msg = messages.Front();
 				if (messages.Front().header.type == 1) {
 
-					std::string senderName(msg.contents.data());
+					std::string senderName(msg.payload.data());
 					std::cout << "[" << senderName << "]: " <<
-						std::string(msg.contents.begin() + senderName.length(), msg.contents.end()) << std::endl;
+						std::string(msg.payload.begin() + senderName.length(), msg.payload.end()) << std::endl;
 				}
 				messages.PopFront();
 			}

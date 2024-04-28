@@ -7,8 +7,7 @@ net_server::net_server(uint16_t port) : m_acceptor(m_asio_context, asio::ip::tcp
 
 net_server::~net_server()
 {
-	if (m_asio_thread)
-		if (m_asio_thread->joinable()) m_asio_thread->join();
+	Stop();
 }
 
 void net_server::Start()
@@ -20,6 +19,11 @@ void net_server::Start()
 
 void net_server::Stop()
 {
+	for (auto it : m_connections) {
+		it.second->Disconnect();
+	}
+	m_connections.clear();
+	if (m_asio_thread->joinable()) m_asio_thread->join();
 }
 
 void net_server::StartAcceptConnection()

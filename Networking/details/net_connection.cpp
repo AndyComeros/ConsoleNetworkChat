@@ -86,7 +86,7 @@ void net_connection::StartWriteHeader()
 
 void net_connection::StartWriteBody()
 {
-	asio::async_write(m_socket, asio::buffer(m_msg_out.Front().contents.data(), m_msg_out.Front().contents.size()),
+	asio::async_write(m_socket, asio::buffer(m_msg_out.Front().payload.data(), m_msg_out.Front().payload.size()),
 		[&](const asio::error_code& ec, size_t bytes) {
 
 			if (!ec) {
@@ -111,7 +111,7 @@ void net_connection::StartReadHeader()
 
 				//std::cout << "recived message!\n";
 				// allocate memory in m_current_message to make sure it can store entire message
-				m_current_msg_in.contents.resize(m_current_msg_in.header.data_size);
+				m_current_msg_in.payload.resize(m_current_msg_in.header.data_size);
 
 				// probably should check if message has a payload at all?
 				StartReadMessage();
@@ -126,7 +126,7 @@ void net_connection::StartReadHeader()
 
 void net_connection::StartReadMessage()
 {
-	m_socket.async_read_some(asio::buffer(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
+	m_socket.async_read_some(asio::buffer(m_current_msg_in.payload.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
 		{
 			if (!ec) {
 				//std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
