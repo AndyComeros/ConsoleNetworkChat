@@ -1,8 +1,9 @@
 #include "../net_connection.h"
 
-net_connection::net_connection(asio::io_context& context, TSQue<net_message>& msg_queue) : m_asio_context(context),
+net_connection::net_connection(asio::io_context& context, TSQue<net_message>& msg_queue, connectionID id = 0) : m_asio_context(context),
 m_socket(context),
-m_msg_in(msg_queue)
+m_msg_in(msg_queue),
+m_ID(id)
 {
 }
 
@@ -11,7 +12,7 @@ net_connection::~net_connection()
 	Disconnect();
 }
 
-void net_connection::SendMessage(net_message& message)
+void net_connection::SendMessage(const net_message& message)
 {
 	// there is probably something wrong here...
 	asio::post([&, message]() {
@@ -26,9 +27,10 @@ void net_connection::SendMessage(net_message& message)
 	});
 }
 
-void net_connection::Connect(const std::string& ip, int port)
+void net_connection::Connect(const std::string& ip, uint16_t port)
 {
 	asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string(ip), port);
+	
 	m_socket.async_connect(endpoint, [&](const asio::error_code& ec) {
 		
 		if (!ec)
@@ -36,7 +38,7 @@ void net_connection::Connect(const std::string& ip, int port)
 			std::cout << "connected!" << std::endl;
 		}
 		else {
-			std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
+			//std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
 		}
 	});
 }
@@ -77,14 +79,14 @@ void net_connection::StartWriteHeader()
 			}
 			else {
 				//m_msg_out.PopFront();
-				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartWriteHeader]: " << ec.message() << std::endl;
 			}
 		});
 }
 
 void net_connection::StartWriteBody()
 {
-	asio::async_write(m_socket, asio::buffer(m_msg_out.Front().contents.data(), m_msg_out.Front().contents.size()),
+	asio::async_write(m_socket, asio::buffer(m_msg_out.Front().payload.data(), m_msg_out.Front().payload.size()),
 		[&](const asio::error_code& ec, size_t bytes) {
 
 			if (!ec) {
@@ -96,7 +98,7 @@ void net_connection::StartWriteBody()
 				}
 			}
 			else {
-				std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
 			}
 		});
 }
@@ -107,31 +109,32 @@ void net_connection::StartReadHeader()
 		{
 			if (!ec) {
 
-				std::cout << "recived message!\n";
+				//std::cout << "recived message!\n";
 				// allocate memory in m_current_message to make sure it can store entire message
-				m_current_msg_in.contents.resize(m_current_msg_in.header.data_size);
+				m_current_msg_in.payload.resize(m_current_msg_in.header.data_size);
 
 				// probably should check if message has a payload at all?
 				StartReadMessage();
 
 			}
 			else {
-				std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
-
+				//std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
+				StartReadHeader();//should probably do this if no connection is found or something? or disconnect entirely.
 			}
 		});
 }
 
 void net_connection::StartReadMessage()
 {
-	m_socket.async_read_some(asio::buffer(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
+	m_socket.async_read_some(asio::buffer(m_current_msg_in.payload.data(), m_current_msg_in.header.data_size), [&](const asio::error_code& ec, size_t bytes)
 		{
 			if (!ec) {
-				std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
+				//std::cout.write(m_current_msg_in.contents.data(), m_current_msg_in.header.data_size);
+				m_msg_in.PushBack(m_current_msg_in);
 				StartReadHeader();
 			}
 			else {
-				std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartReadMessage]: " << ec.message() << std::endl;
 			}
 	});
 }

@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{fc464a23-78ce-496f-9d4d-6f02a901525a}</ProjectGuid>
-    <RootNamespace>NetworkChat</RootNamespace>
+    <ProjectGuid>{7dc56aa8-f267-41cd-915d-fca30c796492}</ProjectGuid>
+    <RootNamespace>ChatApp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Networking\include;$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Networking\include;$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Networking\include;$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Networking\include;$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,17 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="details\net_client.cpp" />
-    <ClCompile Include="details\net_connection.cpp" />
-    <ClCompile Include="details\net_server.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="net_client.h" />
-    <ClInclude Include="net_connection.h" />
-    <ClInclude Include="net_message.h" />
-    <ClInclude Include="net_server.h" />
-    <ClInclude Include="ts_queue.h" />
+    <ProjectReference Include="..\Networking\Networking.vcxproj">
+      <Project>{162c3593-5e6a-406b-b939-5606588c71cb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

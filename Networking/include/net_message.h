@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstring>
 
 struct net_message_header {
 
@@ -8,11 +9,10 @@ struct net_message_header {
 	uint32_t data_size = 0;
 };
 
-
 struct net_message {
 	
 	net_message_header header;
-	std::vector<char> contents;
+	std::vector<char> payload;
 
 	template<typename T>
 	void AddData(const T& nData);
@@ -24,25 +24,25 @@ struct net_message {
 template<typename T>
 inline void net_message::AddData(const T& nData)
 {
-	size_t s = contents.size();
+	size_t s = payload.size();
 
-	contents.resize(contents.size() + sizeof(nData));
-	std::memcpy(contents.data() + s, &nData, sizeof(T));
+	payload.resize(payload.size() + sizeof(nData));
+	std::memcpy(payload.data() + s, &nData, sizeof(T));
 
-	header.data_size = contents.size();
+	header.data_size = payload.size();
 }
 
 inline void net_message::AddData(const void* nData, size_t size)
 {
-	size_t s = contents.size();
+	size_t s = payload.size();
 
-	contents.resize(contents.size() + size);
-	std::memcpy(contents.data() + s, nData, size);
+	payload.resize(payload.size() + size);
+	std::memcpy(payload.data() + s, nData, size);
 
-	header.data_size = contents.size();
+	header.data_size = payload.size();
 }
 
 inline size_t net_message::TotalSize()
 {
-	return sizeof(net_message_header) + (contents.size() * (sizeof(char)));
+	return sizeof(net_message_header) + payload.size();
 }
