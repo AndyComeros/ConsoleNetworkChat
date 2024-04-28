@@ -2,23 +2,26 @@
 
 int main() {
 
-	net_client client;
-
-	client.Connect("127.0.0.1", 62225);
-	client.Start();
-
 	std::cout << "username: ";
 	std::string username = "no_name";
 	std::getline(std::cin, username);
 	std::cout << "set username to: " << username << std::endl;
 
+	std::cout << "host ip: ";
+	std::string serverIP = "";
+	std::getline(std::cin, serverIP);
+	std::cout << "Attempting to connect to: " << serverIP << std::endl;
+
+
+	net_client client;
+	client.Connect(serverIP, 25567);
+	client.Start();
+	
 	std::thread inputThread([&]() {
 
 		std::string strbuff;
 
 		for (;;) {
-
-			//std::cin >> strbuff;
 			std::getline(std::cin, strbuff);
 
 			net_message message;
@@ -28,7 +31,6 @@ int main() {
 			client.Connection().SendMessage(message);
 		}
 	});
-
 	
 	std::thread outputThread([&]() {
 		TSQue<net_message>& messages = client.Messages();
@@ -39,14 +41,13 @@ int main() {
 				if (messages.Front().header.type == 1) {
 
 					std::string senderName(msg.contents.data());
-					std::cout << "[" << senderName << "]" <<
+					std::cout << "[" << senderName << "]: " <<
 						std::string(msg.contents.begin() + senderName.length(), msg.contents.end()) << std::endl;
 				}
 				messages.PopFront();
 			}
 		}
 	});
-
 
 	if (inputThread.joinable())
 		inputThread.join();

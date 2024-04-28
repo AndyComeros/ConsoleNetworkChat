@@ -12,7 +12,7 @@ using connection_map = std::unordered_map<connectionID, std::shared_ptr<net_conn
 
 class net_server {
 public:
-	net_server(int port);
+	net_server(uint16_t port);
 	virtual ~net_server();
 
 	void Start();
@@ -27,6 +27,10 @@ public:
 	TSQue<net_message>& Messages();
 
 	connection_map& Connections();
+
+protected:
+	virtual void OnConnect(std::shared_ptr<net_connection>& connection);
+
 private:
 
 	std::unique_ptr<std::thread> m_asio_thread;

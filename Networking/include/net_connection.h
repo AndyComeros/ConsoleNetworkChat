@@ -18,7 +18,7 @@ public:
 
 	void SendMessage(const net_message& message);
 
-	void Connect(const std::string& ip, int port);
+	void Connect(const std::string& ip, uint16_t port);
 
 	void Disconnect();
 

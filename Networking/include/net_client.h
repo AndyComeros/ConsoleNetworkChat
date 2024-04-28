@@ -8,21 +8,23 @@
 
 class net_client { 
 public:
-
 	net_client();
 	virtual ~net_client();
 
 	void Start();
 
-	void Connect(const std::string& ip, int port);
+	void Connect(const std::string& ip, uint16_t port);
+
 	void Disconnect();
 
 	TSQue<net_message>& Messages();
 
 	net_connection& Connection();
 
-private:
+protected:
+	virtual void OnConnect();
 
+private:
 	asio::io_context m_asio_context;
 	net_connection m_connection;
 

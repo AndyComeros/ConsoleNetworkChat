@@ -2,7 +2,7 @@
 
 int main() {
 
-	net_server server(62225);
+	net_server server(25567);
 	server.Start();
 	
 	std::thread printThread([&]() {
@@ -13,6 +13,7 @@ int main() {
 			if (!messages.Empty()) {
 
 				const net_message& msg = messages.Front();
+
 				if (msg.header.type == 1) {
 					server.BroadcastMessage(msg);
 				}

@@ -27,9 +27,10 @@ void net_connection::SendMessage(const net_message& message)
 	});
 }
 
-void net_connection::Connect(const std::string& ip, int port)
+void net_connection::Connect(const std::string& ip, uint16_t port)
 {
 	asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string(ip), port);
+	
 	m_socket.async_connect(endpoint, [&](const asio::error_code& ec) {
 		
 		if (!ec)
@@ -37,7 +38,7 @@ void net_connection::Connect(const std::string& ip, int port)
 			std::cout << "connected!" << std::endl;
 		}
 		else {
-			std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
+			//std::cerr << "[net_connection::Connect]: " << ec.message() << std::endl;
 		}
 	});
 }
@@ -78,7 +79,7 @@ void net_connection::StartWriteHeader()
 			}
 			else {
 				//m_msg_out.PopFront();
-				//std::cerr << "[Connection::StartWriteBody]: " << ec.message() << std::endl;
+				//std::cerr << "[Connection::StartWriteHeader]: " << ec.message() << std::endl;
 			}
 		});
 }
@@ -118,7 +119,7 @@ void net_connection::StartReadHeader()
 			}
 			else {
 				//std::cout << "[StartReadHeader]: " << ec.message() << std::endl;
-
+				StartReadHeader();//should probably do this if no connection is found or something? or disconnect entirely.
 			}
 		});
 }

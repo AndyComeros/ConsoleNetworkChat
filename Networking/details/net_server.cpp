@@ -1,7 +1,8 @@
 #include "../net_server.h"
 
-net_server::net_server(int port) : m_acceptor(m_asio_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(),port))
+net_server::net_server(uint16_t port) : m_acceptor(m_asio_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(),port))
 {
+	std::cout << "port: " << m_acceptor.local_endpoint().port() << std::endl;
 }
 
 net_server::~net_server()
@@ -24,9 +25,11 @@ void net_server::Stop()
 void net_server::StartAcceptConnection()
 {
 	m_newConnection = std::make_shared<net_connection>(m_asio_context, m_messages, m_nextID);
+
 	m_acceptor.async_accept(m_newConnection->Socket(), [&](const asio::error_code& ec) {
 		if (!ec)
 		{
+			OnConnect(m_newConnection);
 			m_connections.emplace(m_nextID,m_newConnection);
 			++ m_nextID;
 
@@ -61,4 +64,9 @@ TSQue<net_message>& net_server::Messages()
 
 connection_map& net_server::Connections() {
 	return m_connections;
+}
+
+void net_server::OnConnect(std::shared_ptr<net_connection>& connection)
+{
+
 }

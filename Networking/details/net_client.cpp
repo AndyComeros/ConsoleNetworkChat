@@ -16,7 +16,7 @@ void net_client::Start()
 	m_asio_thread = std::make_unique<std::thread>([&]() { m_asio_context.run(); });
 }
 
-void net_client::Connect(const std::string& ip, int port)
+void net_client::Connect(const std::string& ip, uint16_t port)
 {
 	m_connection.Connect(ip,port);
 }
@@ -33,4 +33,8 @@ TSQue<net_message>& net_client::Messages()
 net_connection& net_client::Connection()
 {
 	return m_connection;
+}
+
+void net_client::OnConnect()
+{
 }
